@@ -8,7 +8,7 @@ __version__ = "0.0.0"
 
 REPO_NAME = "Abstractive-Text-Summarizer"
 AUTHOR_USER_NAME = "vvkarteek"
-SRC_REPO = "Abstractive-Text-Summarizer"
+SRC_REPO = "Abstractive_Text_Summarizer"
 AUTHOR_EMAIL = "vvkarteek@gmail.com"
 
 
