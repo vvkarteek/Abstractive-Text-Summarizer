@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import logging
 logging.basicConfig(level=logging.INFO,format='[%(asctime)s]:%(message)s:')
-project_name="Abstractive-Text-Summarizer"
+project_name="Abstractive_Text_Summarizer"
 list_of_files=[
     ".github/workflows/.gitkeep",
     f"src/{project_name}/__init__.py",
