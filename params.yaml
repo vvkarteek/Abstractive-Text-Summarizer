@@ -4,7 +4,7 @@ TrainingArguments:
   per_device_train_batch_size: 2
   weight_decay: 0.01
   logging_steps: 50
-  evaluation_strategy: steps
+  evaluation_strategy: steps # Change from eval_strategy to evaluation_strategy
   eval_steps: 300
   save_steps: 1000
   gradient_accumulation_steps: 8
