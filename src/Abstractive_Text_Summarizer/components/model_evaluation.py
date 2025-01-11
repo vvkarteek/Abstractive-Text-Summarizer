@@ -23,7 +23,7 @@ class ModelEvaluation:
 
     
     def calculate_metric_on_test_ds(self,dataset, metric, model, tokenizer, 
-                               batch_size=16, device="cuda" if torch.cuda.is_available() else "cpu", 
+                               batch_size=4, device="cuda" if torch.cuda.is_available() else "cpu", 
                                column_text="article", 
                                column_summary="highlights"):
         article_batches = list(self.generate_batch_sized_chunks(dataset[column_text], batch_size))
@@ -34,8 +34,8 @@ class ModelEvaluation:
             
             inputs = tokenizer(article_batch, max_length=1024,  truncation=True, 
                             padding="max_length", return_tensors="pt")
-            
-            summaries = model.generate(input_ids=inputs["input_ids"].to(device),
+            with torch.amp.autocast():
+                summaries = model.generate(input_ids=inputs["input_ids"].to(device),
                             attention_mask=inputs["attention_mask"].to(device), 
                             length_penalty=0.8, num_beams=8, max_length=128)
             ''' parameter for length penalty ensures that the model does not generate sequences that are too long. '''
