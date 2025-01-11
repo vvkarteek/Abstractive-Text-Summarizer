@@ -34,8 +34,7 @@ class ModelEvaluation:
             
             inputs = tokenizer(article_batch, max_length=1024,  truncation=True, 
                             padding="max_length", return_tensors="pt")
-            with torch.amp.autocast():
-                summaries = model.generate(input_ids=inputs["input_ids"].to(device),
+            summaries = model.generate(input_ids=inputs["input_ids"].to(device),
                             attention_mask=inputs["attention_mask"].to(device), 
                             length_penalty=0.8, num_beams=8, max_length=128)
             ''' parameter for length penalty ensures that the model does not generate sequences that are too long. '''
