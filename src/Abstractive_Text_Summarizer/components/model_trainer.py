@@ -26,7 +26,7 @@ class ModelTrainer:
            output_dir=self.config.root_dir, num_train_epochs=5, warmup_steps=300,
            weight_decay=0.01, logging_steps=50,
            eval_strategy='steps', eval_steps=300, save_steps=1000,
-           gradient_accumulation_steps=4,per_device_train_batch_size=4, fp16=True
+           gradient_accumulation_steps=16,per_device_train_batch_size=8, fp16=True
         ) 
         trainer = Trainer(model=model_pegasus, args=trainer_args,
                   tokenizer=tokenizer, data_collator=seq2seq_data_collator,
