@@ -22,7 +22,7 @@ class ModelEvaluation:
             yield list_of_elements[i : i + batch_size]
 
     
-    def calculate_metric_on_test_ds(self,dataset, metric, model, tokenizer, 
+    def calculate_metric_on_test_ds(self,dataset, rouge_metric, bleu_metric, model, tokenizer, 
                                batch_size=4, device="cuda" if torch.cuda.is_available() else "cpu", 
                                column_text="article", 
                                column_summary="highlights"):
@@ -49,10 +49,15 @@ class ModelEvaluation:
             
             
             metric.add_batch(predictions=decoded_summaries, references=target_batch)
-            
+             
+            tokenized_references = [[ref.split()] for ref in target_batch]  # BLEU expects list of lists
+            tokenized_predictions = [pred.split() for pred in decoded_summaries]
+            bleu_metric.add_batch(predictions=tokenized_predictions, references=tokenized_references)
+
         #  Finally compute and return the ROUGE scores.
-        score = metric.compute()
-        return score
+        rouge_score = rouge_metric.compute()
+        bleu_score = bleu_metric.compute()
+        return rouge_score, bleu_score
 
 
     def evaluate(self):
@@ -67,14 +72,19 @@ class ModelEvaluation:
         rouge_names = ["rouge1", "rouge2", "rougeL", "rougeLsum"]
   
         rouge_metric = evaluate.load('rouge')
+        bleu_metric = evaluate.load('bleu')
 
         score = self.calculate_metric_on_test_ds(
-        dataset_samsum_pt['test'][0:10], rouge_metric, model_pegasus, tokenizer, batch_size = 2, column_text = 'dialogue', column_summary= 'summary'
+        dataset_samsum_pt['test'][0:10], rouge_metric, bleu_metric, model_pegasus, tokenizer, batch_size = 2, column_text = 'dialogue', column_summary= 'summary'
             )
 
         rouge_dict = {rn: score[rn] for rn in rouge_names }
 
         df = pd.DataFrame(rouge_dict, index = ['pegasus'] )
         df.to_csv(self.config.metric_file_name, index=False)
+        print("RougeScores:")
+        print(df)
+        print("\nBleu Score:")
+        print("{bleu_score['bleu']:.4f"})
 
         
