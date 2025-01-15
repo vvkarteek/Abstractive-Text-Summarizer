@@ -48,7 +48,7 @@ class ModelEvaluation:
             decoded_summaries = [d.replace("", " ") for d in decoded_summaries]
             
             
-            metric.add_batch(predictions=decoded_summaries, references=target_batch)
+            rouge_metric.add_batch(predictions=decoded_summaries, references=target_batch)
              
             tokenized_references = [[ref.split()] for ref in target_batch]  # BLEU expects list of lists
             tokenized_predictions = [pred.split() for pred in decoded_summaries]
@@ -74,11 +74,11 @@ class ModelEvaluation:
         rouge_metric = evaluate.load('rouge')
         bleu_metric = evaluate.load('bleu')
 
-        score = self.calculate_metric_on_test_ds(
+        rouge_score, bleu_score= self.calculate_metric_on_test_ds(
         dataset_samsum_pt['test'][0:10], rouge_metric, bleu_metric, model_pegasus, tokenizer, batch_size = 2, column_text = 'dialogue', column_summary= 'summary'
             )
 
-        rouge_dict = {rn: score[rn] for rn in rouge_names }
+        rouge_dict = {rn: rouge_score[rn] for rn in rouge_names }
 
         df = pd.DataFrame(rouge_dict, index = ['pegasus'] )
         df.to_csv(self.config.metric_file_name, index=False)
