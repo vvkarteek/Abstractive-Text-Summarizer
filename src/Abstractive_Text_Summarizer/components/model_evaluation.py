@@ -85,6 +85,6 @@ class ModelEvaluation:
         print("RougeScores:")
         print(df)
         print("\nBleu Score:")
-        print("{bleu_score['bleu']:.4f"})
+        print("{bleu_score['bleu']:.4f}")
 
         
