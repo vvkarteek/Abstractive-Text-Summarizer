@@ -6,6 +6,14 @@ import pandas as pd
 from tqdm import tqdm
 from Abstractive_Text_Summarizer.entity import ModelEvaluationConfig
 
+# Suppress TensorFlow logs and warnings
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # 0 = all logs, 1 = warnings, 2 = errors, 3 = nothing
+os.environ["TF_TENSORRT_DISABLE"] = "1"  # Disable TensorRT usage
+
+import tensorflow as tf
+
+# Rest of the code, where you load your model and run training...
 
 
 
