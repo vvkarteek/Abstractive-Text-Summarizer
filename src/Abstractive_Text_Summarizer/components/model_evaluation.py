@@ -6,16 +6,6 @@ import pandas as pd
 from tqdm import tqdm
 from Abstractive_Text_Summarizer.entity import ModelEvaluationConfig
 
-# Suppress TensorFlow logs and warnings
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # 0 = all logs, 1 = warnings, 2 = errors, 3 = nothing
-os.environ["TF_TENSORRT_DISABLE"] = "1"  # Disable TensorRT usage
-
-import tensorflow as tf
-
-# Rest of the code, where you load your model and run training...
-
-
 
 class ModelEvaluation:
     def __init__(self, config: ModelEvaluationConfig):
@@ -83,7 +73,7 @@ class ModelEvaluation:
         bleu_metric = evaluate.load('bleu')
 
         rouge_score, bleu_score= self.calculate_metric_on_test_ds(
-        dataset_samsum_pt['test'][0:10], rouge_metric, bleu_metric, model_pegasus, tokenizer, batch_size = 2, column_text = 'dialogue', column_summary= 'summary'
+        dataset_samsum_pt['test'][0:10], rouge_metric, bleu_metric, model_pegasus, tokenizer, batch_size = 4, column_text = 'dialogue', column_summary= 'summary'
             )
 
         rouge_dict = {rn: rouge_score[rn] for rn in rouge_names }
